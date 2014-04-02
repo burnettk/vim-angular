@@ -1,4 +1,4 @@
-# vim-angular
+# angular.vim
 
 Some niceties for using vim with the AngularJS framework.
 
