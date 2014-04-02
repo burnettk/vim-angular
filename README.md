@@ -82,8 +82,6 @@ you have a karma watch going. See the [screencast][screencast].
   `:BundleInstall`
 
         Bundle "burnettk/vim-angular"
-        Bundle "tomtom/tlib_vim"
-        Bundle "garbas/vim-snipmate"
 
 Once help tags have been generated, and I have written the helpfile, you
 can view the manual with
