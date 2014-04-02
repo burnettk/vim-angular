@@ -71,6 +71,19 @@ or the "go run spec" mapping:
 will toggle the spec between "it" and "iit." This works especially well if
 you have a karma watch going. See the [screencast][screencast].
 
+### Syntastic syntax checker ignores
+
+You know how you use syntastic to check your syntax as you edit, because
+it works for pretty much any language, and is awesome? When you use angular
+directives (like ng-app, ng-repeat, and even library directives like
+ui-view), the html tidy check will complain. This is fixed out of the box,
+and you can use the same (syntastic) mechanism to add your own directives,
+by specifying exclusions in your .vimrc like this:
+
+```
+let g:syntastic_html_tidy_ignore_errors = ['proprietary attribute "myhotcompany-']
+```
+
 ## Installation
 
 * Using [Pathogen][pathogen], run the following commands:
