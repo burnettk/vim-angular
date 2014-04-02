@@ -104,7 +104,7 @@ can view the manual with
 
 Like vim-angular.vim? Follow the repository on
 [GitHub](https://github.com/burnettk/vim-angular) and vote for it on
-[vim.org](http://www.vim.org/scripts/script.php?script_id=FIXME).  And if
+[vim.org](http://www.vim.org/scripts/script.php?script_id=4907).  And if
 you're feeling especially charitable, follow [burnettk](http://notkeepingitreal.com) on
 [Twitter](http://twitter.com/kbbkkbbk) and
 [GitHub](https://github.com/burnettk).
