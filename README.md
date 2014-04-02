@@ -64,9 +64,9 @@ So, if you're anywhere inside a spec:
 
     :AngularRunSpec
     
-or the "go run spec" mapping:
+or the "run spec" mapping:
 
-    grs
+    <leader>rs
     
 will toggle the spec between "it" and "iit." This works especially well if
 you have a karma watch going. See the [screencast][screencast].
