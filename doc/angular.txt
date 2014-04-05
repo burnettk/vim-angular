@@ -1,0 +1,62 @@
+*angular.txt*  Some niceties for using vim with the AngularJS framework.
+
+Author:  Kevin Burnett <http://notkeepingitreal.com/>
+License: Same terms as Vim itself (see |license|)
+
+This plugin is only available if 'compatible' is not set.
+
+                                                *angular*
+There are separate javascript, html, and css runtime files, as well as lots of
+other nice plugins that you may want to consider using if you're doing angular
+development. See the README at https://github.com/burnettk/vim-angular for a
+nice list.
+
+NAVIGATING                                      *angular-navigating*
+
+Get around efficiently in an angular project.
+
+                                                *angular-gf*
+gf                      Go to the file (service/directive/etc) for the keyword
+                        under the cursor (if you cursor is on BlahService, it
+                        will take you to blah-service.js). Still works for
+                        actual files, like template references and
+                        ng-include's src directive.
+
+                                                *angular-:A*
+:A                      In a test file, edit the implementation, and vice
+                        versa.  Basically looks for a corresponding file in
+                        directory that looks like it might include tests or
+                        app code, respectively.
+
+                                                *angular-:AS*
+:AS                     Like :A, but in a split.
+
+                                                *angular-:AV*
+:AV                     Like :A, but in a vertical split.
+
+                                                *angular-:AT*
+:AT                     Like :A, but in a tab.
+
+RUNNING A SPEC                                  *angular-run-spec*
+
+It doesn't actually run the spec, but it sure as hell looks like it does if you
+have a karma watch going. Wut, you don't use karma watch? Dude!
+
+                                                *angular-:AngularRunSpec*
+:AngularRunSpec         Updates the spec where your cursor is sitting from
+                        "it" to "iit" and writes the file. Why? Jasmine
+                        notices that you have an iit spec, and, when you run
+                        your test suite, it will only run that one spec. If
+                        the spec is already "focused" (with "iit"), running
+                        this command will toggle it back to "it." All of this
+                        is much more effective if you have karma watching your
+                        files and running your tests automatically when you
+                        save files.
+
+ABOUT                                           *angular-about*
+
+Grab the latest version or report a bug on GitHub:
+
+https://github.com/burnettk/vim-angular
+
+ vim:tw=78:et:ft=help:norl:

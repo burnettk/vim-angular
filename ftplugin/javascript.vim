@@ -21,7 +21,7 @@ if exists("g:did_vim_angular_ftplugin_functions")
 endif
 let g:did_vim_angular_ftplugin_functions = 1
 
-function SwitchToAlternateFile()
+function! s:Alternate(cmd) abort
   let l:currentpath = expand('%')
   let l:newpaths = []
 
@@ -41,22 +41,20 @@ function SwitchToAlternateFile()
   if l:newpaths != []
     for path in l:newpaths
       if filereadable(path)
-        execute 'edit ' . path
-        return
+        return a:cmd . ' ' . fnameescape(path)
       endif
     endfor
   endif
-endfunction
 
-command -nargs=0 A call SwitchToAlternateFile()
+  return 'echoerr '.string("Couldn't find alternate file")
+endfunction
 
 let g:FindIgnore = ['coverage/', 'test/', '.git']
 
 " Find file in current directory and edit it.
-function! Find(...)
+function! s:Find(...) abort
   let path="."
   let query=a:1
-  echo "query: " . query
 
   if a:0 == 2
     let cmd=a:2
@@ -103,13 +101,10 @@ function! Find(...)
 
     call delete(tmpfile)
   endif
-  "echom l:command
 endfunction
 
-command! -nargs=* Find :call Find(<f-args>)
-
 " jacked from abolish.vim (s:snakecase). thank you, tim pope.
-function! s:dashcase(word)
+function! s:dashcase(word) abort
   let word = substitute(a:word,'::','/','g')
   let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
   let word = substitute(word,'\(\l\|\d\)\(\u\)','\1_\2','g')
@@ -119,7 +114,7 @@ function! s:dashcase(word)
 endfunction
 
 
-function! FindFileBasedOnAngularServiceUnderCursor(cmd)
+function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
   let l:fileundercursor = expand('<cfile>')
 
   " Maybe the person actually has the cursor over a file path.
@@ -143,21 +138,18 @@ function! FindFileBasedOnAngularServiceUnderCursor(cmd)
 
   let l:wordundercursor = expand('<cword>')
   let l:dashcased = s:dashcase(l:wordundercursor)
-  "echo l:dashcased
   let l:filethatmayexist = l:dashcased . ".js"
-  "let l:filethatmayexist = printf("%.js", tolower(l:dashcased))
-  "echo l:filethatmayexist
-  execute "Find " . l:filethatmayexist . " " . a:cmd
+
+  call <SID>Find(l:filethatmayexist, a:cmd)
 endfunction
 
 " helper function. goes to end of line first ($) so it doesn't go the previous
 " function if your cursor is sitting right on top of the pattern
-function! s:SearchUpForPattern(pattern)
+function! s:SearchUpForPattern(pattern) abort
   execute 'silent normal! ' . '$?' . a:pattern . "\r"
 endfunction
 
-function! AngularRunSpec()
-
+function! s:AngularRunSpec() abort
   " save cursor position so we can go back
   let b:angular_pos = getpos('.')
 
@@ -175,13 +167,11 @@ function! AngularRunSpec()
     " move cursor back to the spec we want to run
     call setpos('.', l:positionofspectorun)
 
-    " change the current spec to "it"
+    " change the current spec to "iit"
     execute 'silent normal! cwiit'
-  else 
-    call setpos('.', b:angular_pos)
-    cal s:SearchUpForPattern('iit(')
-    let l:wordundercursor = expand('<cword>')
-    execute 'normal! cwit'
+  elseif l:wordundercursor == "iit"
+    " delete the second i in "iit"
+    execute 'silent normal! x'
   endif
 
   update " write the file if modified
@@ -190,14 +180,31 @@ function! AngularRunSpec()
   call setpos('.', b:angular_pos)
 endfunction
 
-command! -nargs=* AngularRunSpec :call AngularRunSpec()
+nnoremap <silent> <Plug>AngularGfJump :<C-U>exe <SID>FindFileBasedOnAngularServiceUnderCursor('open')<CR>
+nnoremap <silent> <Plug>AngularGfSplit :<C-U>exe <SID>FindFileBasedOnAngularServiceUnderCursor('split')<CR>
+nnoremap <silent> <Plug>AngularGfTabjump :<C-U>exe <SID>FindFileBasedOnAngularServiceUnderCursor('tabedit')<CR>
 
-augroup vim_angular_mappings
+" consider also [d
+" maybe keep gf fallback (for the app dir) in place
+augroup angular_gf
   autocmd!
-  autocmd FileType javascript nnoremap <silent><buffer> gf          :<C-U>exe FindFileBasedOnAngularServiceUnderCursor("open")<CR>
-  autocmd FileType javascript nnoremap <silent><buffer> <C-W>f      :<C-U>exe FindFileBasedOnAngularServiceUnderCursor("split")<CR>
-  autocmd FileType javascript nnoremap <silent><buffer> <C-W><C-F>  :<C-U>exe FindFileBasedOnAngularServiceUnderCursor("split")<CR>
-  autocmd FileType javascript nnoremap <silent><buffer> <C-W>gf     :<C-U>exe FindFileBasedOnAngularServiceUnderCursor("tabedit")<CR>
+  autocmd FileType javascript nmap <buffer> gf          <Plug>AngularGfJump
+  autocmd FileType javascript nmap <buffer> <C-W>f      <Plug>AngularGfSplit
+  autocmd FileType javascript nmap <buffer> <C-W><C-F>  <Plug>AngularGfSplit
+  autocmd FileType javascript nmap <buffer> <C-W>gf     <Plug>AngularGfTabjump
+augroup END
+
+augroup angular_alternate
+  autocmd!
+  autocmd FileType javascript command! -buffer -bar -bang A :exe s:Alternate('edit<bang>')
+  autocmd FileType javascript command! -buffer -bar AS :exe s:Alternate('split')
+  autocmd FileType javascript command! -buffer -bar AV :exe s:Alternate('vsplit')
+  autocmd FileType javascript command! -buffer -bar AT :exe s:Alternate('tabedit')
+augroup END
+
+augroup angular_run_spec
+  autocmd!
+  autocmd FileType javascript command! -buffer AngularRunSpec :call s:AngularRunSpec()
   autocmd FileType javascript nnoremap <silent><buffer> <Leader>rs  :AngularRunSpec<CR>
 augroup END
 
