@@ -24,7 +24,8 @@ describe "alternate" do
     should_alternate_between('app/src/poo.js', 'test/unit/pooSpec.js')
     should_alternate_between('app/js/poo.js', 'test/unit/poo.js')
     should_alternate_between('app/js/poo.js', 'test/unit/pooSpec.js')
-    should_alternate_between('public/js/controllers/piles.js', 'test/karma/unit/controllers/piles.spec.js')
+    should_alternate_between('app/scripts/controllers/poo.js', 'test/spec/controllers/poo.js') # yoeman
+    should_alternate_between('public/js/controllers/piles.js', 'test/karma/unit/controllers/piles.spec.js') # mean
   end
 
   specify "pairs should not always work" do

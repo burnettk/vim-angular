@@ -129,6 +129,10 @@ function! s:Alternate(cmd) abort
     \ ]
   elseif l:currentpath =~ "test/karma/unit"
     let l:newpaths = [substitute(substitute(l:currentpath, "test/karma/unit", "public/js", ""), ".spec.js", ".js", "")]
+  elseif l:currentpath =~ "test/spec"
+    let l:newpaths = [substitute(l:currentpath, "test/spec", "app/scripts", "")]
+  elseif l:currentpath =~ "app/scripts"
+    let l:newpaths = [substitute(l:currentpath, "app/scripts", "test/spec", "")]
   elseif l:currentpath =~ "app/src"
     let l:newpaths = [substitute(l:currentpath, "app/src", "test/unit", ""), substitute(substitute(l:currentpath, "app/src", "test/unit", ""), ".js", "Spec.js", "")]
   elseif l:currentpath =~ "app/js"
