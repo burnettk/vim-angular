@@ -1,13 +1,13 @@
 require "spec_helper"
 
-describe "angular vim" do
+describe "runspec" do
 
   specify "html tidy syntastic ignores" do
     value_of_variable = vim.echo('g:syntastic_html_tidy_ignore_errors')
     value_of_variable.should eq("[' proprietary attribute \"ng-', ' proprietary attribute \"ui-view', '<div> proprietary attribute \"src']")
   end
 
-  specify "run spec command with one spec" do
+  specify "command with one spec" do
     write_file('test.js', <<-EOF)
       it('should work', function() {
         var actualThing = 'cow';
@@ -27,7 +27,7 @@ describe "angular vim" do
     EOF
   end
 
-  specify "run spec command with two specs" do
+  specify "command with two specs" do
     write_file('test.js', <<-EOF)
       it('should work', function() {
         var actualThing = 'cow';
@@ -57,7 +57,7 @@ describe "angular vim" do
     EOF
   end
 
-  specify "run spec command untoggles" do
+  specify "command untoggles" do
     write_file('test.js', <<-EOF)
       iit('should work', function() {
         var actualThing = 'cow';
@@ -86,7 +86,7 @@ describe "angular vim" do
     EOF
   end
 
-  specify "run spec command grabs focus away from another spec" do
+  specify "command grabs focus away from another spec" do
     write_file('test.js', <<-EOF)
       iit('should work', function() {
         var actualThing = 'cow';

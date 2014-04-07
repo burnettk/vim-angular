@@ -7,9 +7,30 @@ Vimrunner::RSpec.configure do |config|
   config.start_vim do
     vim = Vimrunner.start#_gvim
     plugin_path = File.expand_path('../..', __FILE__)
-    vim.prepend_runtimepath(plugin_path) # so the ftplugin behavior takes effect
-    vim.add_plugin(plugin_path, 'plugin/vim-angular.vim')
-    vim.add_plugin(plugin_path, 'ftplugin/javascript.vim')
+    #vim.prepend_runtimepath(plugin_path) # so the ftplugin behavior takes effect
+    vim.add_plugin(plugin_path, 'plugin/angular.vim')
     vim
   end
+
+  # takes a filename argument like app/js/blah.js and
+  # creates the directory structure if it doesn't already exist
+  def safe_write_file(filename)
+    dirname = File.dirname(filename)
+    if !File.directory?(dirname)
+      FileUtils.mkdir_p dirname
+    end
+    write_file(filename, "")
+  end
+
+  def current_file_name
+    vim.echo 'bufname("%")'
+  end
+
+  # takes any number of filenames as arguments and creates each as an empty file
+  def setup_filesystem(*args)
+    args.each do |filename|
+      safe_write_file(filename)
+    end
+  end
+
 end

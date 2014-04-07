@@ -16,11 +16,13 @@ NAVIGATING                                      *angular-navigating*
 Get around efficiently in an angular project.
 
                                                 *angular-gf*
-gf                      Go to the file (service/directive/etc) for the keyword
-                        under the cursor (if you cursor is on BlahService, it
-                        will take you to blah-service.js). Still works for
-                        actual files, like template references and
-                        ng-include's src directive.
+gf                      Bolsters the original gf by also sending you to the
+                        file under the cursor if the file has an implicit
+                        "app" subdirectory prefix (a common grunt config). If
+                        the word under the cursor is a service/directive/etc,
+                        go to the file where it is defined. For example, if
+                        your cursor is on BlahService, it will take you to
+                        blah-service.js.
 
                                                 *angular-:A*
 :A                      In a test file, edit the implementation, and vice
