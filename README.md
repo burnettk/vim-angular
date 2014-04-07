@@ -1,5 +1,7 @@
 # angular.vim
 
+[![Build Status](https://travis-ci.org/burnettk/vim-angular.svg)](https://travis-ci.org/burnettk/vim-angular)
+
 Some niceties for using Vim with the AngularJS framework.
 
 The [canonical "what editor should I use for Angular?" post][editorchoice]
