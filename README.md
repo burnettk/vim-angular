@@ -21,7 +21,7 @@ also make your life easier when working with angular projects:
 
  * [pangloss/vim-javascript][vim-javascript] - "Vastly improved Javascript indentation and syntax support in Vim."
  * [othree/javascript-libraries-syntax.vim][javascript-libraries-syntax.vim] - "Syntax for JavaScript libraries," including Angular. This is the hotness you want to autocomplete ng-repeat et al. in your html.
- * [matthewsimo/angular-vim-snippets][angular-vim-snippets] - "repo for UltiSnips & Snipmate for angular to be included as a submodule for use in your .vim directory." ngc<tab> ftw.
+ * [matthewsimo/angular-vim-snippets][angular-vim-snippets] - "repo for UltiSnips & Snipmate for angular to be included as a submodule for use in your .vim directory." `ngc<tab>` ftw.
  * [claco/jasmine.vim][jasmine.vim] - "Jasmine Plugin for Vim," making your unit testing experience more excellent
  * [scrooloose/syntastic.git][syntastic] - "Syntax checking hacks for vim": excellent syntax checking for everything, including javascript and html. Install jshint globally (`npm install -g jshint`) and syntastic will get to work checking your javascript the right way (if your project already has a .jshintrc for use with grunt, it will even use that).
 
