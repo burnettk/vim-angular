@@ -199,11 +199,11 @@ nnoremap <silent> <Plug>AngularGfTabjump :<C-U>exe <SID>FindFileBasedOnAngularSe
 
 augroup angular_gf
   autocmd!
-  autocmd FileType javascript command! -buffer AngularGoToFile :call s:FindFileBasedOnAngularServiceUnderCursor('open')
-  autocmd FileType javascript nmap <buffer> gf          <Plug>AngularGfJump
-  autocmd FileType javascript nmap <buffer> <C-W>f      <Plug>AngularGfSplit
-  autocmd FileType javascript nmap <buffer> <C-W><C-F>  <Plug>AngularGfSplit
-  autocmd FileType javascript nmap <buffer> <C-W>gf     <Plug>AngularGfTabjump
+  autocmd FileType javascript,html command! -buffer AngularGoToFile :call s:FindFileBasedOnAngularServiceUnderCursor('open')
+  autocmd FileType javascript,html nmap <buffer> gf          <Plug>AngularGfJump
+  autocmd FileType javascript,html nmap <buffer> <C-W>f      <Plug>AngularGfSplit
+  autocmd FileType javascript,html nmap <buffer> <C-W><C-F>  <Plug>AngularGfSplit
+  autocmd FileType javascript,html nmap <buffer> <C-W>gf     <Plug>AngularGfTabjump
 augroup END
 
 augroup angular_alternate
