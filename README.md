@@ -114,7 +114,7 @@ let g:syntastic_html_tidy_ignore_errors = ['proprietary attribute "myhotcompany-
 * Using [Pathogen][pathogen], run the following commands:
 
         % cd ~/.vim/bundle
-        % git clone git://github.com//burnettk/vim-angular.git
+        % git clone git://github.com/burnettk/vim-angular.git
 
 * Using [Vundle][vundle], add the following to your `vimrc` and then run
   `:BundleInstall`
