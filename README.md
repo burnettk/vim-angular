@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/burnettk/vim-angular.svg)](https://travis-ci.org/burnettk/vim-angular)
 
-Some niceties for using Vim with the AngularJS framework.
+Some niceties for using Vim with the AngularJS framework. See the [screencast][screencast].
 
 The [canonical "what editor should I use for Angular?" post][editorchoice]
 pretty squarely lands on Webstorm/IntelliJ as the peoples' choice 
@@ -94,7 +94,7 @@ or the "run spec" mapping:
     <leader>rs
     
 will toggle the spec between "it" and "iit." This works especially well if
-you have a karma watch going. See the [screencast][screencast] (soon come).
+you have a karma watch going, as shown in the [screencast][screencast].
 
 ### Syntastic syntax checker ignores
 
@@ -146,7 +146,7 @@ See `:help license`.
 [jasmine.vim]: https://github.com/claco/jasmine.vim
 [syntastic]: https://github.com/scrooloose/syntastic
 [ctags]: http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
-[screencast]: http://notkeepingitreal.com
+[screencast]: http://youtu.be/-tEaY7HsTn8
 [pathogen]: https://github.com/tpope/vim-pathogen
 [vundle]: https://github.com/gmarik/vundle
 [project]: https://github.com/burnettk/vim-angular
