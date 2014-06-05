@@ -31,8 +31,10 @@ endif
 
 let g:angular_find_ignore = g:angular_find_ignore + [
   \ 'coverage/',
+  \ 'build/',
+  \ 'dist/',
   \ 'test/',
-  \ '.git'
+  \ '.git/'
   \ ]
 
 " Helper
