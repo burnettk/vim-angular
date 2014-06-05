@@ -66,6 +66,12 @@ from a template path is the "app" directory (which is a common value for
 of these two things don't work for your use case, file a ticket, figure
 out why and file a pull request, or [use ctags][ctags].
 
+Results can be filtered by specifying exclusions in your .vimrc like this:
+
+```
+let g:angular_find_ignore = ['build', 'dist']
+```
+
 ### Run the current spec
 
 If you're writing jasmine unit tests for your angular app, they look like

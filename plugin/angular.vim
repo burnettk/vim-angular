@@ -22,7 +22,15 @@ let g:syntastic_html_tidy_ignore_errors = g:syntastic_html_tidy_ignore_errors + 
   \ ]
 
 
-let g:FindIgnore = ['coverage/', 'test/', '.git']
+if !exists('g:angular_find_ignore')
+  let g:angular_find_ignore = []
+endif
+
+let g:angular_find_ignore = g:angular_find_ignore + [
+  \ 'coverage/',
+  \ 'test/',
+  \ '.git'
+  \ ]
 
 " Helper
 " Find file in or below current directory and edit it.
@@ -37,10 +45,10 @@ function! s:Find(...) abort
   endif
 
 
-  if !exists("g:FindIgnore")
+  if !exists("g:angular_find_ignore")
     let ignore = ""
   else
-    let ignore = " | egrep -v '".join(g:FindIgnore, "|")."'"
+    let ignore = " | egrep -v '".join(g:angular_find_ignore, "|")."'"
   endif
 
   let l:command="find ".path." -type f -iname '*".query."*'".ignore
