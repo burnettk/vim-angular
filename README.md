@@ -69,7 +69,7 @@ out why and file a pull request, or [use ctags][ctags].
 Results can be filtered by specifying exclusions in your .vimrc like this:
 
 ```
-let g:angular_find_ignore = ['build', 'dist']
+let g:angular_find_ignore = ['build/', 'dist/']
 ```
 
 ### Run the current spec
