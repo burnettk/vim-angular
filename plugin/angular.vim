@@ -17,7 +17,7 @@ endif
 
 let g:syntastic_html_tidy_ignore_errors = g:syntastic_html_tidy_ignore_errors + [
   \   ' proprietary attribute "ng-',
-  \   ' proprietary attribute "ui-view',
+  \   ' proprietary attribute "ui-',
   \   '<ng-include> is not recognized!',
   \   'discarding unexpected <ng-include>',
   \   'discarding unexpected </ng-include>',
