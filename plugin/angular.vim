@@ -174,6 +174,38 @@ function! s:SearchUpForPattern(pattern) abort
 endfunction
 
 
+function! s:AngularRunSpecBlock() abort
+  " save cursor position so we can go back
+  let b:angular_pos = getpos('.')
+
+  cal s:SearchUpForPattern('describe(')
+
+  let l:wordundercursor = expand('<cword>')
+
+  if l:wordundercursor == "describe"
+    " if there was a spec (anywhere in the file) highlighted with "ddescribe" before, revert it to "describe"
+    let l:positionofspectorun = getpos('.')
+
+    " this can move the cursor, hence setting the cursor back
+    %s/ddescribe/describe/ge
+    %s/iit/it/ge
+
+    " move cursor back to the spec we want to run
+    call setpos('.', l:positionofspectorun)
+
+    " change the current spec to "ddescribe"
+    execute 'silent normal! cwddescribe'
+  elseif l:wordundercursor == "ddescribe"
+    " delete the second d in "ddescribe"
+    execute 'silent normal! x'
+  endif
+
+  update " write the file if modified
+
+  " Reset cursor to previous position.
+  call setpos('.', b:angular_pos)
+endfunction
+
 function! s:AngularRunSpec() abort
   " save cursor position so we can go back
   let b:angular_pos = getpos('.')
@@ -230,5 +262,7 @@ augroup END
 augroup angular_run_spec
   autocmd!
   autocmd FileType javascript command! -buffer AngularRunSpec :call s:AngularRunSpec()
+  autocmd FileType javascript command! -buffer AngularRunSpecBlock :call s:AngularRunSpecBlock()
   autocmd FileType javascript nnoremap <silent><buffer> <Leader>rs  :AngularRunSpec<CR>
+  autocmd FileType javascript nnoremap <silent><buffer> <Leader>rb  :AngularRunSpecBlock<CR>
 augroup END

@@ -55,6 +55,11 @@ have a karma watch going. Wut, you don't use karma watch? Dude!
                         files and running your tests automatically when you
                         save files.
 
+                                                *angular-:AngularRunSpecBlock*
+:AngularRunSpecBlock    Perform the same dance as :AngularRunSpec but using the
+                        describe block in which the cursor is sitting,
+                        effectively running all specs inside the describe block.
+
 ABOUT                                           *angular-about*
 
 Grab the latest version or report a bug on GitHub:
