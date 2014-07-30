@@ -57,7 +57,7 @@ describe "runspec" do
     EOF
   end
 
-  specify "command untoggles" do
+  specify "command untoggles spec" do
     write_file('test.js', <<-EOF)
       iit('should work', function() {
         var actualThing = 'cow';
@@ -115,4 +115,74 @@ describe "runspec" do
       });
     EOF
   end
+
+  specify "command runs describe block" do
+    write_file('test.js', <<-EOF)
+      describe('aThing', function() {
+        it('should work', function() {
+          var actualThing = 'cow';
+          expect(actualThing).toEqual('cow');
+        });
+      });
+    EOF
+
+    vim.edit 'test.js'
+    vim.command 'AngularRunSpecBlock'
+
+    IO.read('test.js').strip.should eq normalize_string_indent(<<-EOF)
+      ddescribe('aThing', function() {
+        it('should work', function() {
+          var actualThing = 'cow';
+          expect(actualThing).toEqual('cow');
+        });
+      });
+    EOF
+  end
+
+  specify "command to run describe block clears out any focused specs marked iit" do
+    write_file('test.js', <<-EOF)
+      describe('aThing', function() {
+        iit('should work', function() {
+          var actualThing = 'cow';
+          expect(actualThing).toEqual('cow');
+        });
+      });
+    EOF
+
+    vim.edit 'test.js'
+    vim.command 'AngularRunSpecBlock'
+
+    IO.read('test.js').strip.should eq normalize_string_indent(<<-EOF)
+      ddescribe('aThing', function() {
+        it('should work', function() {
+          var actualThing = 'cow';
+          expect(actualThing).toEqual('cow');
+        });
+      });
+    EOF
+  end
+
+  specify "command toggles describe blocks and it specs" do
+    write_file('test.js', <<-EOF)
+      ddescribe('aThing', function() {
+        it('should work', function() {
+          var actualThing = 'cow';
+          expect(actualThing).toEqual('cow');
+        });
+      });
+    EOF
+
+    vim.edit 'test.js'
+    vim.command 'AngularRunSpecBlock'
+
+    IO.read('test.js').strip.should eq normalize_string_indent(<<-EOF)
+      describe('aThing', function() {
+        it('should work', function() {
+          var actualThing = 'cow';
+          expect(actualThing).toEqual('cow');
+        });
+      });
+    EOF
+  end
+
 end

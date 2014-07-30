@@ -102,11 +102,11 @@ or the "run spec" mapping:
 will toggle the spec between "it" and "iit." This works especially well if
 you have a karma watch going, as shown in the [screencast][screencast].
 
-You are able to do the same with a describe block using the block command:
+You are able to do the same with a describe block using the run block command:
     
     :AngularRunSpecBlock
 
-or the coresponding mapping:
+or the corresponding mapping:
 
     <leader>rb
 
