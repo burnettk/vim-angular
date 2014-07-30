@@ -257,23 +257,7 @@ augroup angular_alternate
   autocmd FileType javascript command! -buffer -bar AS :exe s:Alternate('split')
   autocmd FileType javascript command! -buffer -bar AV :exe s:Alternate('vsplit')
   autocmd FileType javascript command! -buffer -bar AT :exe s:Alternate('tabedit')
-augroup END        it('should pass the data from the server to the promise chanin ', function(){
-            var p = $scope.getEntityData(promiseMock);
-            p.then(function(pr){
-                expect(pr).toEqual(mockTimeSeriesData.data);
-            });
-            tDeferred.resolve(mockTimeSeriesData);
-            $scope.$digest();
-        });
-        it('shouldn\'nt faild if nothing is returned, mostly for test convenience', function(){
-            var p = $scope.getEntityData(promiseMock);
-            p.then(function(pr){
-                expect(pr).toBeUndefined();
-            });
-            tDeferred.resolve();
-            $scope.$digest();
-        });
-
+augroup END
 
 augroup angular_run_spec
   autocmd!
