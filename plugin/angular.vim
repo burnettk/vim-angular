@@ -174,6 +174,38 @@ function! s:SearchUpForPattern(pattern) abort
 endfunction
 
 
+function! s:AngularRunSpecBlock() abort
+  " save cursor position so we can go back
+  let b:angular_pos = getpos('.')
+
+  cal s:SearchUpForPattern('describe(')
+
+  let l:wordundercursor = expand('<cword>')
+
+  if l:wordundercursor == "describe"
+    " if there was a spec (anywhere in the file) highlighted with "ddescribe" before, revert it to "describe"
+    let l:positionofspectorun = getpos('.')
+
+    " this can move the cursor, hence setting the cursor back
+    %s/ddescribe/describe/ge
+    %s/iit/it/ge
+
+    " move cursor back to the spec we want to run
+    call setpos('.', l:positionofspectorun)
+
+    " change the current spec to "ddescribe"
+    execute 'silent normal! cwddescribe'
+  elseif l:wordundercursor == "ddescribe"
+    " delete the second d in "ddescribe"
+    execute 'silent normal! x'
+  endif
+
+  update " write the file if modified
+
+  " Reset cursor to previous position.
+  call setpos('.', b:angular_pos)
+endfunction
+
 function! s:AngularRunSpec() abort
   " save cursor position so we can go back
   let b:angular_pos = getpos('.')
@@ -225,10 +257,28 @@ augroup angular_alternate
   autocmd FileType javascript command! -buffer -bar AS :exe s:Alternate('split')
   autocmd FileType javascript command! -buffer -bar AV :exe s:Alternate('vsplit')
   autocmd FileType javascript command! -buffer -bar AT :exe s:Alternate('tabedit')
-augroup END
+augroup END        it('should pass the data from the server to the promise chanin ', function(){
+            var p = $scope.getEntityData(promiseMock);
+            p.then(function(pr){
+                expect(pr).toEqual(mockTimeSeriesData.data);
+            });
+            tDeferred.resolve(mockTimeSeriesData);
+            $scope.$digest();
+        });
+        it('shouldn\'nt faild if nothing is returned, mostly for test convenience', function(){
+            var p = $scope.getEntityData(promiseMock);
+            p.then(function(pr){
+                expect(pr).toBeUndefined();
+            });
+            tDeferred.resolve();
+            $scope.$digest();
+        });
+
 
 augroup angular_run_spec
   autocmd!
   autocmd FileType javascript command! -buffer AngularRunSpec :call s:AngularRunSpec()
+  autocmd FileType javascript command! -buffer AngularRunSpecBlock :call s:AngularRunSpecBlock()
   autocmd FileType javascript nnoremap <silent><buffer> <Leader>rs  :AngularRunSpec<CR>
+  autocmd FileType javascript nnoremap <silent><buffer> <Leader>rb  :AngularRunSpecBlock<CR>
 augroup END
