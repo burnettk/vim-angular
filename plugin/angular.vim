@@ -102,7 +102,6 @@ function! s:dashcase(word) abort
   return word
 endfunction
 
-
 function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
   let l:fileundercursor = expand('<cfile>')
 
@@ -125,7 +124,15 @@ function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
   let l:dashcased = s:dashcase(l:wordundercursor)
   let l:filethatmayexist = l:dashcased . ".js"
 
+  " call <SID>Find(l:wordundercursor, a:cmd)
   call <SID>Find(l:filethatmayexist, a:cmd)
+endfunction
+
+function! s:GenerateTestPaths(currentpath, appbasepath, testbasepath) abort
+  let l:samefilename = substitute(a:currentpath, a:appbasepath, a:testbasepath, "")
+  let l:withcamelcasedspecsuffix = substitute(substitute(a:currentpath, a:appbasepath, a:testbasepath, ""), ".js", "Spec.js", "")
+  let l:withdotspecsuffix = substitute(substitute(a:currentpath, a:appbasepath, a:testbasepath, ""), ".js", ".spec.js", "")
+  return [l:samefilename, l:withcamelcasedspecsuffix, l:withdotspecsuffix]
 endfunction
 
 
@@ -138,8 +145,14 @@ function! s:Alternate(cmd) abort
     \ substitute(l:currentpath, "test/unit", "app/js", ""),
     \ substitute(l:currentpath, "test/unit", "app/src", ""),
     \ substitute(substitute(l:currentpath, "test/unit", "app/js", ""), "Spec.js", ".js", ""),
-    \ substitute(substitute(l:currentpath, "test/unit", "app/src", ""), "Spec.js", ".js", "")
+    \ substitute(substitute(l:currentpath, "test/unit", "app/js", ""), ".spec.js", ".js", ""),
+    \ substitute(substitute(l:currentpath, "test/unit", "app/src", ""), "Spec.js", ".js", ""),
+    \ substitute(substitute(l:currentpath, "test/unit", "app/src", ""), ".spec.js", ".js", "")
     \ ]
+    if exists('g:angular_src_directory')
+      let l:newpaths = l:newpaths + [substitute(substitute(l:currentpath, "test/unit", g:angular_src_directory, ""), "Spec.js", ".js", ""),
+            \ substitute(substitute(l:currentpath, "test/unit", g:angular_src_directory, ""), ".spec.js", ".js", "")]
+    endif
   elseif l:currentpath =~ "test/karma/unit"
     let l:newpaths = [substitute(substitute(l:currentpath, "test/karma/unit", "public/js", ""), ".spec.js", ".js", "")]
   elseif l:currentpath =~ "test/spec"
@@ -147,15 +160,18 @@ function! s:Alternate(cmd) abort
   elseif l:currentpath =~ "app/scripts"
     let l:newpaths = [substitute(l:currentpath, "app/scripts", "test/spec", "")]
   elseif l:currentpath =~ "app/src"
-    let l:newpaths = [substitute(l:currentpath, "app/src", "test/unit", ""), substitute(substitute(l:currentpath, "app/src", "test/unit", ""), ".js", "Spec.js", "")]
+    let l:newpaths = s:GenerateTestPaths(l:currentpath, 'app/src', 'test/unit')
   elseif l:currentpath =~ "app/js"
-    let l:newpaths = [substitute(l:currentpath, "app/js", "test/unit", ""), substitute(substitute(l:currentpath, "app/js", "test/unit", ""), ".js", "Spec.js", "")]
+    let l:newpaths = s:GenerateTestPaths(l:currentpath, 'app/js', 'test/unit')
   elseif l:currentpath =~ "public/js"
     let l:newpaths = [substitute(l:currentpath, "public/js", "test/karma/unit", ""), substitute(substitute(l:currentpath, "public/js", "test/karma/unit", ""), ".js", ".spec.js", "")]
   elseif l:currentpath =~ "frontend/src"
     let l:newpaths = [substitute(substitute(l:currentpath, "frontend/src", "tests/frontend", ""), ".js", ".spec.js", "")]
   elseif l:currentpath =~ "tests/frontend"
     let l:newpaths = [substitute(substitute(l:currentpath, "tests/frontend", "frontend/src", ""), ".spec.js", ".js", "")]
+  elseif exists('g:angular_src_directory') && l:currentpath =~ g:angular_src_directory
+    let l:newpaths = s:GenerateTestPaths(l:currentpath, g:angular_src_directory, 'test/unit')
+    "let l:newpaths = [substitute(l:currentpath, g:angular_src_directory, "test/unit", ""), substitute(substitute(l:currentpath, g:angular_src_directory, "test/unit",""), ".js", "Spec.js", "")]
   endif
 
   if l:newpaths != []

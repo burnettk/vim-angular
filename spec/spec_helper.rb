@@ -33,4 +33,8 @@ Vimrunner::RSpec.configure do |config|
     end
   end
 
+  def assume_vimrc(command)
+    vim.command(command)
+  end
+
 end
