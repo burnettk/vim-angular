@@ -22,13 +22,22 @@ gf                      Bolsters the original gf by also sending you to the
                         the word under the cursor is a service/directive/etc,
                         go to the file where it is defined. For example, if
                         your cursor is on BlahService, it will take you to
-                        blah-service.js.
+                        blah-service.js. If your filenames are not
+                        dasherized, this will not work out well. Set
+                        g:angular_filename_convention to either 'camelcased'
+                        or 'titlecased' in your .vimrc.
 
                                                 *angular-:A*
 :A                      In a test file, edit the implementation, and vice
-                        versa.  Basically looks for a corresponding file in
-                        directory that looks like it might include tests or
-                        app code, respectively.
+                        versa.  It basically looks for a corresponding file in
+                        a directory that looks like it might include tests or
+                        app code, respectively. If this doesn't work, it is
+                        quite likely because the angular directory structure
+                        convention you're using is not conventional enough.
+                        That's ok; you can tell angular.vim where your source
+                        and test directories are located with
+                        g:angular_source_directory and
+                        g:angular_test_directory.
 
                                                 *angular-:AS*
 :AS                     Like :A, but in a split.

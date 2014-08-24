@@ -61,7 +61,7 @@ function! s:Find(...) abort
   let l:num=strlen(substitute(l:list, "[^\n]", "", "g"))
 
   if l:num < 1
-    echo "'".query."' not found"
+    echo "angular.vim says: '".query."' not found"
     return
   endif
 
@@ -122,10 +122,13 @@ function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
 
   let l:wordundercursor = expand('<cword>')
   let l:dashcased = s:dashcase(l:wordundercursor)
-  let l:filethatmayexist = l:dashcased . ".js"
+  let l:filethatmayexist = l:dashcased . '.js'
 
-  " call <SID>Find(l:wordundercursor, a:cmd)
-  call <SID>Find(l:filethatmayexist, a:cmd)
+  if exists('g:angular_filename_convention') && (g:angular_filename_convention == 'camelcased' || g:angular_filename_convention == 'titlecased')
+    call <SID>Find(l:wordundercursor . '.js', a:cmd)
+  else
+    call <SID>Find(l:filethatmayexist, a:cmd)
+  endif
 endfunction
 
 function! s:GenerateTestPaths(currentpath, appbasepath, testbasepath) abort
@@ -135,54 +138,50 @@ function! s:GenerateTestPaths(currentpath, appbasepath, testbasepath) abort
   return [l:samefilename, l:withcamelcasedspecsuffix, l:withdotspecsuffix]
 endfunction
 
+function! s:GenerateSrcPaths(currentpath, appbasepath, testbasepath) abort
+  return [substitute(substitute(a:currentpath, a:testbasepath, a:appbasepath, ""), "Spec.js", ".js", ""),
+        \ substitute(substitute(a:currentpath, a:testbasepath, a:appbasepath, ""), ".spec.js", ".js", "")]
+endfunction
 
 function! s:Alternate(cmd) abort
   let l:currentpath = expand('%')
-  let l:newpaths = []
+  let l:possiblepathsforalternatefile = []
 
-  if l:currentpath =~ "test/unit"
-    let l:newpaths = [
-    \ substitute(l:currentpath, "test/unit", "app/js", ""),
-    \ substitute(l:currentpath, "test/unit", "app/src", ""),
-    \ substitute(substitute(l:currentpath, "test/unit", "app/js", ""), "Spec.js", ".js", ""),
-    \ substitute(substitute(l:currentpath, "test/unit", "app/js", ""), ".spec.js", ".js", ""),
-    \ substitute(substitute(l:currentpath, "test/unit", "app/src", ""), "Spec.js", ".js", ""),
-    \ substitute(substitute(l:currentpath, "test/unit", "app/src", ""), ".spec.js", ".js", "")
-    \ ]
-    if exists('g:angular_src_directory')
-      let l:newpaths = l:newpaths + [substitute(substitute(l:currentpath, "test/unit", g:angular_src_directory, ""), "Spec.js", ".js", ""),
-            \ substitute(substitute(l:currentpath, "test/unit", g:angular_src_directory, ""), ".spec.js", ".js", "")]
+  if exists('g:angular_source_directory')
+    let l:possiblesrcpaths = [g:angular_source_directory]
+  else
+    let l:possiblesrcpaths = ['app/src', 'app/js', 'app/scripts', 'public/js', 'frontend/src']
+  endif
+
+  if exists('g:angular_test_directory')
+    let l:possibletestpaths = [g:angular_test_directory]
+  else
+    let l:possibletestpaths = ['test/unit', 'test/spec', 'test/karma/unit', 'tests/frontend']
+  endif
+
+  for srcpath in l:possiblesrcpaths
+    if l:currentpath =~ srcpath
+      for testpath in l:possibletestpaths
+        let l:possiblepathsforalternatefile = l:possiblepathsforalternatefile + s:GenerateTestPaths(l:currentpath, srcpath, testpath)
+      endfor
     endif
-  elseif l:currentpath =~ "test/karma/unit"
-    let l:newpaths = [substitute(substitute(l:currentpath, "test/karma/unit", "public/js", ""), ".spec.js", ".js", "")]
-  elseif l:currentpath =~ "test/spec"
-    let l:newpaths = [substitute(l:currentpath, "test/spec", "app/scripts", "")]
-  elseif l:currentpath =~ "app/scripts"
-    let l:newpaths = [substitute(l:currentpath, "app/scripts", "test/spec", "")]
-  elseif l:currentpath =~ "app/src"
-    let l:newpaths = s:GenerateTestPaths(l:currentpath, 'app/src', 'test/unit')
-  elseif l:currentpath =~ "app/js"
-    let l:newpaths = s:GenerateTestPaths(l:currentpath, 'app/js', 'test/unit')
-  elseif l:currentpath =~ "public/js"
-    let l:newpaths = [substitute(l:currentpath, "public/js", "test/karma/unit", ""), substitute(substitute(l:currentpath, "public/js", "test/karma/unit", ""), ".js", ".spec.js", "")]
-  elseif l:currentpath =~ "frontend/src"
-    let l:newpaths = [substitute(substitute(l:currentpath, "frontend/src", "tests/frontend", ""), ".js", ".spec.js", "")]
-  elseif l:currentpath =~ "tests/frontend"
-    let l:newpaths = [substitute(substitute(l:currentpath, "tests/frontend", "frontend/src", ""), ".spec.js", ".js", "")]
-  elseif exists('g:angular_src_directory') && l:currentpath =~ g:angular_src_directory
-    let l:newpaths = s:GenerateTestPaths(l:currentpath, g:angular_src_directory, 'test/unit')
-    "let l:newpaths = [substitute(l:currentpath, g:angular_src_directory, "test/unit", ""), substitute(substitute(l:currentpath, g:angular_src_directory, "test/unit",""), ".js", "Spec.js", "")]
-  endif
+  endfor
 
-  if l:newpaths != []
-    for path in l:newpaths
-      if filereadable(path)
-        return a:cmd . ' ' . fnameescape(path)
-      endif
-    endfor
-  endif
+  for testpath in l:possibletestpaths
+    if l:currentpath =~ testpath
+      for srcpath in l:possiblesrcpaths
+        let l:possiblepathsforalternatefile = l:possiblepathsforalternatefile + s:GenerateSrcPaths(l:currentpath, srcpath, testpath)
+      endfor
+    endif
+  endfor
 
-  return 'echoerr '.string("Couldn't find alternate file")
+  for path in l:possiblepathsforalternatefile
+    if filereadable(path)
+      return a:cmd . ' ' . fnameescape(path)
+    endif
+  endfor
+
+  return 'echoerr '.string("angular.vim says: Couldn't find alternate file")
 endfunction
 
 

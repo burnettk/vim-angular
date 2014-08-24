@@ -2,28 +2,57 @@ require "spec_helper"
 
 describe "alternate" do
 
+  before do
+    assume_blank_vimrc_by_unsetting_any_global_variables
+  end
+
   specify "pairs that should work" do
     should_alternate_between('app/src/poo.js', 'test/unit/poo.js')
     should_alternate_between('app/src/poo.js', 'test/unit/poo.spec.js')
     should_alternate_between('app/src/poo.js', 'test/unit/pooSpec.js')
+
+    should_alternate_between('app/src/poo.js', 'test/spec/poo.js')
+    should_alternate_between('app/src/poo.js', 'test/spec/poo.spec.js')
+    should_alternate_between('app/src/poo.js', 'test/spec/pooSpec.js')
+
     should_alternate_between('app/js/poo.js', 'test/unit/poo.js')
     should_alternate_between('app/js/poo.js', 'test/unit/poo.spec.js')
     should_alternate_between('app/js/poo.js', 'test/unit/pooSpec.js')
+
+    should_alternate_between('app/js/poo.js', 'test/spec/poo.js')
+    should_alternate_between('app/js/poo.js', 'test/spec/poo.spec.js')
+    should_alternate_between('app/js/poo.js', 'test/spec/pooSpec.js')
+
     should_alternate_between('app/scripts/controllers/poo.js', 'test/spec/controllers/poo.js') # yoeman
     should_alternate_between('public/js/controllers/piles.js', 'test/karma/unit/controllers/piles.spec.js') # mean framework
     should_alternate_between('frontend/src/poo.js', 'tests/frontend/poo.spec.js') # Pull Request 6 supporting nkoehring's convention
   end
 
-  specify "pair when src directory is configured by user" do
-    assume_vimrc 'let g:angular_src_directory = "WebContent/js"'
-    should_alternate_between('WebContent/js/poo.js', 'test/unit/pooSpec.js')
+  specify "pairs that should work when src directory is configured by user" do
+    assume_vimrc 'let g:angular_source_directory = "WebContent/js"'
+
     should_alternate_between('WebContent/js/poo.js', 'test/unit/poo.js')
     should_alternate_between('WebContent/js/poo.js', 'test/unit/poo.spec.js')
-    #should_alternate_between('WebContent/js/poo.js', 'test/spec/poo.js')
-    #should_alternate_between('WebContent/js/poo.js', 'test/spec/pooSpec.js')
+    should_alternate_between('WebContent/js/poo.js', 'test/unit/pooSpec.js')
+
+    should_alternate_between('WebContent/js/poo.js', 'test/spec/poo.js')
+    should_alternate_between('WebContent/js/poo.js', 'test/spec/poo.spec.js')
+    should_alternate_between('WebContent/js/poo.js', 'test/spec/pooSpec.js')
   end
 
-  specify "pairs should not always work" do
+  specify "pairs that should work when test directory is configured by user" do
+    assume_vimrc 'let g:angular_test_directory = "test/units"'
+
+    should_alternate_between('app/js/poo.js', 'test/units/poo.js')
+    should_alternate_between('app/js/poo.js', 'test/units/poo.spec.js')
+    should_alternate_between('app/js/poo.js', 'test/units/pooSpec.js')
+
+    should_alternate_between('app/src/poo.js', 'test/units/poo.js')
+    should_alternate_between('app/src/poo.js', 'test/units/poo.spec.js')
+    should_alternate_between('app/src/poo.js', 'test/units/pooSpec.js')
+  end
+
+  specify "pairs should not all work" do
     file_a = 'app/junk/poo.js'
     file_b = 'test/unit/poo.js'
     setup_filesystem(file_a, file_b)

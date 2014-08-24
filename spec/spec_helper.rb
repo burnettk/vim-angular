@@ -37,4 +37,10 @@ Vimrunner::RSpec.configure do |config|
     vim.command(command)
   end
 
+  def assume_blank_vimrc_by_unsetting_any_global_variables
+    vim.command('unlet g:angular_source_directory')
+    vim.command('unlet g:angular_test_directory')
+    vim.command('unlet g:angular_filename_convention')
+  end
+
 end

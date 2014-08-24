@@ -38,8 +38,19 @@ corresponding test file, or from your test file to the corresponding
 implementation file. For example, if you're in app/js/rock-socks.js, and 
 you hammer :A, you will be taken to test/spec/rock-socks.js, if such a file
 exists. Some other common directory structure conventions in the angular 
-community, such as app/src and test/unit, are also supported. Feel free to 
-file a pull request if your reasonable convention doesn't work.
+community, such as app/src and test/unit, are also supported.
+
+If the convention you use doesn't work out of the box, you can specify your
+source and/or test directory in your .vimrc like this:
+
+```
+let g:angular_source_directory = 'app/source'
+let g:angular_test_directory = 'test/units'
+```
+
+If there is a common convention that you feel should really work out of
+the box, feel free to file a pull request to make it work (please
+include a test to prove that it works).
 
 ### Jump to definition of service/directive/controller/etc
 
@@ -70,6 +81,17 @@ Results can be filtered by specifying exclusions in your .vimrc like this:
 
 ```
 let g:angular_find_ignore = ['build/', 'dist/']
+```
+
+It does, by default, assume your filenames are dasherized (likeABoss or
+LikeABoss goes to like-a-boss.js). If you roll with likeABoss.js or
+LikeABoss.js, you can include the following in your .vimrc to make it do
+the right thing:
+
+```
+let g:angular_filename_convention = 'camelcased'
+" or
+let g:angular_filename_convention = 'titlecased'
 ```
 
 ### Run the current spec
