@@ -192,17 +192,21 @@ function! s:SearchUpForPattern(pattern) abort
   execute 'silent normal! ' . '$?' . a:pattern . "\r"
 endfunction
 
+function! s:FirstLetterOf(sourcestring) abort
+  return strpart(a:sourcestring, 0, 1)
+endfunction
 
-function! s:AngularRunSpecBlock() abort
+function! s:AngularRunSpecOrBlock(jasminekeyword) abort
   " save cursor position so we can go back
   let b:angular_pos = getpos('.')
 
-  cal s:SearchUpForPattern('describe(')
+  cal s:SearchUpForPattern(a:jasminekeyword . '(')
 
   let l:wordundercursor = expand('<cword>')
+  let l:firstletter = s:FirstLetterOf(a:jasminekeyword)
 
-  if l:wordundercursor == "describe"
-    " if there was a spec (anywhere in the file) highlighted with "ddescribe" before, revert it to "describe"
+  if l:wordundercursor == a:jasminekeyword
+    " if there was a spec (anywhere in the file) highlighted with "iit" before, revert it to "it"
     let l:positionofspectorun = getpos('.')
 
     " this can move the cursor, hence setting the cursor back
@@ -212,10 +216,12 @@ function! s:AngularRunSpecBlock() abort
     " move cursor back to the spec we want to run
     call setpos('.', l:positionofspectorun)
 
-    " change the current spec to "ddescribe"
-    execute 'silent normal! cwddescribe'
-  elseif l:wordundercursor == "ddescribe"
-    " delete the second d in "ddescribe"
+    " either change the current spec to "iit" or
+    " the current block to "ddescribe"
+    execute 'silent normal! cw' . l:firstletter . a:jasminekeyword
+  elseif l:wordundercursor == l:firstletter . a:jasminekeyword
+    " either delete the second i in "iit" or
+    " the second d in "ddescribe"
     execute 'silent normal! x'
   endif
 
@@ -225,35 +231,12 @@ function! s:AngularRunSpecBlock() abort
   call setpos('.', b:angular_pos)
 endfunction
 
+function! s:AngularRunSpecBlock() abort
+  cal s:AngularRunSpecOrBlock('describe')
+endfunction
+
 function! s:AngularRunSpec() abort
-  " save cursor position so we can go back
-  let b:angular_pos = getpos('.')
-
-  cal s:SearchUpForPattern('it(')
-
-  let l:wordundercursor = expand('<cword>')
-
-  if l:wordundercursor == "it"
-    " if there was a spec (anywhere in the file) highlighted with "iit" before, revert it to "it"
-    let l:positionofspectorun = getpos('.')
-
-    " this can move the cursor, hence setting the cursor back
-    %s/iit/it/ge
-
-    " move cursor back to the spec we want to run
-    call setpos('.', l:positionofspectorun)
-
-    " change the current spec to "iit"
-    execute 'silent normal! cwiit'
-  elseif l:wordundercursor == "iit"
-    " delete the second i in "iit"
-    execute 'silent normal! x'
-  endif
-
-  update " write the file if modified
-
-  " Reset cursor to previous position.
-  call setpos('.', b:angular_pos)
+  cal s:AngularRunSpecOrBlock('it')
 endfunction
 
 
