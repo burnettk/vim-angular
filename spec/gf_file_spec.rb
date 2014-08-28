@@ -50,26 +50,36 @@ describe "gf file" do
     current_file_name.should eq "directive.js"
   end
 
+  specify "the gelus use case from github issue #4" do
+    html_file_at('partials/widgets/clustering-widget.html')
+    do_gf_from_directive_that_references!('partials/widgets/clustering-widget.html', 'clustering')
+    current_file_name.should eq "partials/widgets/clustering-widget.html"
+  end
+
 private
 
   def html_file_at(filename)
     safe_write_file(filename)
   end
 
-  def do_gf(starting_file, starting_file_contents)
+  def do_gf(starting_file, starting_file_contents, search_term = default_search_term)
     write_file(starting_file, starting_file_contents)
 
     vim.edit starting_file
     current_file_name.should eq starting_file
-    vim.normal '/my-cust<CR>'
-    #vim.normal 'gf'
+    vim.normal "/#{search_term}<CR>"
+    # vim.normal 'gf' # does not pick up some aspect of setting up this mapping in the autocmd
     vim.command 'AngularGoToFile'
   end
 
-  def do_gf_from_directive_that_references!(template_url)
+  def default_search_term
+    'my-cust'
+  end
+
+  def do_gf_from_directive_that_references!(template_url, search_term = default_search_term)
     starting_file = 'directive.js'
 
-    do_gf(starting_file, <<-EOF)
+    directive_file_contents = <<-EOF
       angular.module('docsTemplateUrlDirective', [])
         .controller('Controller', ['$scope', function($scope) {
           $scope.customer = {
@@ -83,6 +93,8 @@ private
           };
         });
     EOF
+
+    do_gf(starting_file, directive_file_contents, search_term)
   end
 
   def do_gf_from_view_that_references!(template_url)
