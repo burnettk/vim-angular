@@ -155,7 +155,7 @@ let g:syntastic_html_tidy_ignore_errors = ['proprietary attribute "myhotcompany-
 * Using [Vundle][vundle], add the following to your `vimrc` and then run
   `:BundleInstall`
 
-        Bundle "burnettk/vim-angular"
+        Plugin "burnettk/vim-angular"
 
 Once help tags have been generated, you can view the manual with
 `:help angular`.
