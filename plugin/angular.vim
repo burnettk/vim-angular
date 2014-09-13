@@ -131,21 +131,30 @@ function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
   endif
 endfunction
 
+function! s:SubStr(originalstring, pattern, replacement) abort
+  return substitute(a:originalstring, a:pattern, a:replacement, "")
+endfunction
+
 function! s:GenerateTestPaths(currentpath, appbasepath, testbasepath) abort
-  let l:samefilename = substitute(a:currentpath, a:appbasepath, a:testbasepath, "")
-  let l:withcamelcasedspecsuffix = substitute(substitute(a:currentpath, a:appbasepath, a:testbasepath, ""), ".js", "Spec.js", "")
-  let l:withdotspecsuffix = substitute(substitute(a:currentpath, a:appbasepath, a:testbasepath, ""), ".js", ".spec.js", "")
+  let l:samefilename = s:SubStr(a:currentpath, a:appbasepath, a:testbasepath)
+  let l:withcamelcasedspecsuffix = s:SubStr(s:SubStr(a:currentpath, a:appbasepath, a:testbasepath), ".js", "Spec.js")
+  let l:withdotspecsuffix = s:SubStr(s:SubStr(a:currentpath, a:appbasepath, a:testbasepath), ".js", ".spec.js")
   return [l:samefilename, l:withcamelcasedspecsuffix, l:withdotspecsuffix]
 endfunction
 
 function! s:GenerateSrcPaths(currentpath, appbasepath, testbasepath) abort
-  return [substitute(substitute(a:currentpath, a:testbasepath, a:appbasepath, ""), "Spec.js", ".js", ""),
-        \ substitute(substitute(a:currentpath, a:testbasepath, a:appbasepath, ""), ".spec.js", ".js", "")]
+  return [s:SubStr(s:SubStr(a:currentpath, a:testbasepath, a:appbasepath), "Spec.js", ".js"),
+        \ s:SubStr(s:SubStr(a:currentpath, a:testbasepath, a:appbasepath), ".spec.js", ".js")]
 endfunction
 
 function! s:Alternate(cmd) abort
   let l:currentpath = expand('%')
   let l:possiblepathsforalternatefile = []
+  for possiblenewpath in [s:SubStr(l:currentpath, ".js", "_test.js"), s:SubStr(l:currentpath, "_test.js", ".js")]
+    if possiblenewpath != l:currentpath
+      let l:possiblepathsforalternatefile = [possiblenewpath]
+    endif
+  endfor
 
   if exists('g:angular_source_directory')
     let l:possiblesrcpaths = [g:angular_source_directory]

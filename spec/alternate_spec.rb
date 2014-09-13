@@ -26,6 +26,8 @@ describe "alternate" do
     should_alternate_between('app/scripts/controllers/poo.js', 'test/spec/controllers/poo.js') # yoeman
     should_alternate_between('public/js/controllers/piles.js', 'test/karma/unit/controllers/piles.spec.js') # mean framework
     should_alternate_between('frontend/src/poo.js', 'tests/frontend/poo.spec.js') # Pull Request 6 supporting nkoehring's convention
+
+    should_alternate_between('app/components/pane/pane-directive.js', 'app/components/pane/pane-directive_test.js') # "Best Practice Recommendations for Angular App Structure" convention
   end
 
   specify "pairs that should work when src directory is configured by user" do
