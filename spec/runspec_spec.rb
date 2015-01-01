@@ -4,7 +4,19 @@ describe "runspec" do
 
   specify "html tidy syntastic ignores" do
     value_of_variable = vim.echo('g:syntastic_html_tidy_ignore_errors')
-    value_of_variable.should eq("[' proprietary attribute \"ng-', ' proprietary attribute \"ui-', '<ng-include> is not recognized!', 'discarding unexpected <ng-include>', 'discarding unexpected </ng-include>', '<div> proprietary attribute \"src']")
+    value_of_variable.should include(
+      ' proprietary attribute "ng-',
+      ' proprietary attribute "ui-',
+      '<div> proprietary attribute "src'
+    )
+  end
+
+  specify "html tidy syntastic tags" do
+    value_of_variable = vim.echo('g:syntastic_html_tidy_blocklevel_tags')
+    value_of_variable.should include(
+      'ng-include',
+      'ng-form'
+    )
   end
 
   specify "command with one spec" do
