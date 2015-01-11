@@ -19,7 +19,8 @@ endif
 let g:syntastic_html_tidy_ignore_errors += [
   \   ' proprietary attribute "ng-',
   \   ' proprietary attribute "ui-',
-  \   '<div> proprietary attribute "src',
+  \   ' proprietary attribute "src"',
+  \   ' proprietary attribute "on"',
   \   'trimming empty <select>'
   \ ]
 
