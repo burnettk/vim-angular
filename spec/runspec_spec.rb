@@ -7,7 +7,8 @@ describe "runspec" do
     value_of_variable.should include(
       ' proprietary attribute "ng-',
       ' proprietary attribute "ui-',
-      '<div> proprietary attribute "src',
+      ' proprietary attribute "src"',
+      ' proprietary attribute "on"',
       'trimming empty <select>'
     )
   end
