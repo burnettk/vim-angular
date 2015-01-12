@@ -9,7 +9,7 @@ describe "runspec" do
       ' proprietary attribute "ui-',
       ' proprietary attribute "src"',
       ' proprietary attribute "on"',
-      'trimming empty <select>'
+      'trimming empty <'
     )
   end
 

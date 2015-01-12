@@ -21,7 +21,7 @@ let g:syntastic_html_tidy_ignore_errors += [
   \   ' proprietary attribute "ui-',
   \   ' proprietary attribute "src"',
   \   ' proprietary attribute "on"',
-  \   'trimming empty <select>'
+  \   'trimming empty <'
   \ ]
 
 if !exists('g:syntastic_html_tidy_blocklevel_tags')
