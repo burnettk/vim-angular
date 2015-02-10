@@ -17,10 +17,7 @@ if !exists('g:syntastic_html_tidy_ignore_errors')
 endif
 
 let g:syntastic_html_tidy_ignore_errors += [
-  \   ' proprietary attribute "ng-',
-  \   ' proprietary attribute "ui-',
-  \   ' proprietary attribute "src"',
-  \   ' proprietary attribute "on"',
+  \   '> proprietary attribute "',
   \   'trimming empty <'
   \ ]
 
