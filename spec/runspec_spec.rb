@@ -5,10 +5,7 @@ describe "runspec" do
   specify "html tidy syntastic ignores" do
     value_of_variable = vim.echo('g:syntastic_html_tidy_ignore_errors')
     value_of_variable.should include(
-      ' proprietary attribute "ng-',
-      ' proprietary attribute "ui-',
-      ' proprietary attribute "src"',
-      ' proprietary attribute "on"',
+      '> proprietary attribute "',
       'trimming empty <'
     )
   end
