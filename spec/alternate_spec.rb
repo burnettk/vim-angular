@@ -23,6 +23,9 @@ describe "alternate" do
     should_alternate_between('app/js/poo.js', 'test/spec/poo.spec.js')
     should_alternate_between('app/js/poo.js', 'test/spec/pooSpec.js')
 
+    should_alternate_between('app/foo/foo.controller.js', 'app/foo/test/foo.controller.spec.js')
+    should_alternate_between('app/bar/bar.service.js', 'app/bar/test/bar.service.spec.js')
+
     should_alternate_between('app/scripts/controllers/poo.js', 'test/spec/controllers/poo.js') # yoeman
     should_alternate_between('public/js/controllers/piles.js', 'test/karma/unit/controllers/piles.spec.js') # mean framework
     should_alternate_between('frontend/src/poo.js', 'tests/frontend/poo.spec.js') # Pull Request 6 supporting nkoehring's convention
@@ -42,7 +45,14 @@ describe "alternate" do
     should_alternate_between('WebContent/js/poo.js', 'test/spec/pooSpec.js')
   end
 
-  specify "pairs that should work when test directory is configured by user" do
+  specify "with multiple src directories configured by user" do
+    assume_vimrc 'let g:angular_source_directory = ["WebContent/js", "app/src"]'
+
+    should_alternate_between('WebContent/js/poo.js', 'test/unit/poo.js')
+    should_alternate_between('app/src/poo.js', 'test/unit/pooSpec.js')
+  end
+
+  specify "pairs that should work when one test directory is configured by user" do
     assume_vimrc 'let g:angular_test_directory = "test/units"'
 
     should_alternate_between('app/js/poo.js', 'test/units/poo.js')
@@ -52,6 +62,13 @@ describe "alternate" do
     should_alternate_between('app/src/poo.js', 'test/units/poo.js')
     should_alternate_between('app/src/poo.js', 'test/units/poo.spec.js')
     should_alternate_between('app/src/poo.js', 'test/units/pooSpec.js')
+  end
+
+  specify "with multiple test directories configured by user" do
+    assume_vimrc 'let g:angular_test_directory = ["test/unit", "test/spec"]'
+
+    should_alternate_between('app/js/poo.js', 'test/unit/poo.js')
+    should_alternate_between('app/src/poo.js', 'test/spec/pooSpec.js')
   end
 
   specify "pairs should not all work" do
