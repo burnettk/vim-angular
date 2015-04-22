@@ -41,6 +41,7 @@ Vimrunner::RSpec.configure do |config|
     vim.command('unlet g:angular_source_directory')
     vim.command('unlet g:angular_test_directory')
     vim.command('unlet g:angular_filename_convention')
+    vim.command('unlet g:angular_jasmine_version')
   end
 
 end
