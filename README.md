@@ -107,7 +107,7 @@ it('should work', function() {
 
 ```
 
-Now, if you take that "it" prefix, and replace it with "iit", instead of
+Now, if you take that "it" prefix, and replace it with "fit", instead of
 running your entire suite, it will run JUST THAT ONE SPEC. There are
 probably bad reasons to want to do this, like if your build is broken
 and you want to ignore the failures, but it can be pretty handy to
@@ -121,7 +121,7 @@ or the "run spec" mapping:
 
     <leader>rs
 
-will toggle the spec between "it" and "iit." This works especially well if
+will toggle the spec between "it" and "fit." This works especially well if
 you have a karma watch going, as shown in the [screencast][screencast].
 
 You are able to do the same with a describe block using the run block command:
@@ -131,6 +131,14 @@ You are able to do the same with a describe block using the run block command:
 or the corresponding mapping:
 
     <leader>rb
+
+If you're running jasmine 1 instead of jasmine 2, you will need to use iit and
+ddescribe instead of fit and fdescribe. To make that happen, tell vim-angular
+that you are using jasmine 1 in your .vimrc like this:
+
+```
+let g:angular_jasmine_version = 1
+```
 
 ### Syntastic syntax checker customization
 

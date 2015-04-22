@@ -55,14 +55,16 @@ have a karma watch going. Wut, you don't use karma watch? Dude!
 
                                                 *angular-:AngularRunSpec*
 :AngularRunSpec         Updates the spec where your cursor is sitting from
-                        "it" to "iit" and writes the file. Why? Jasmine
-                        notices that you have an iit spec, and, when you run
-                        your test suite, it will only run that one spec. If
-                        the spec is already "focused" (with "iit"), running
-                        this command will toggle it back to "it." All of this
-                        is much more effective if you have karma watching your
-                        files and running your tests automatically when you
-                        save files.
+                        "it" to "fit" (the f stands for focus) and writes the
+                        file. Why? Jasmine notices that you have a fit spec,
+                        and, when you run your test suite, it will only run
+                        that one spec. If the spec is already "focused" (with
+                        "fit"), running this command will toggle it back to
+                        "it." All of this is much more effective if you have
+                        karma watching your files and running your tests
+                        automatically when you save files. If you are using
+                        jasmine 1, you need to specify iit instead of fit,
+                        so set g:angular_jasmine_version = 1 in your .vimrc.
 
                                                 *angular-:AngularRunSpecBlock*
 :AngularRunSpecBlock    Perform the same dance as :AngularRunSpec but using the
