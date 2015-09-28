@@ -6,6 +6,18 @@ describe "alternate" do
     assume_blank_vimrc_by_unsetting_any_global_variables
   end
 
+  # g:angular_skip_alternate_mappings is used at angular.vim load
+  # time, so it's not as simple as this to test it.
+  # specify "should allow user to disable alternates" do
+  #   assume_vimrc('let g:angular_skip_alternate_mappings = "true"')
+  #   file_a = 'app/src/poo.js'
+  #   file_b = 'test/unit/poo.js'
+  #   setup_filesystem(file_a, file_b)
+  #   vim.edit file_a
+  #   vim.command 'A'
+  #   current_file_name.should eq file_a
+  # end
+
   specify "pairs that should work" do
     should_alternate_between('app/src/poo.js', 'test/unit/poo.js')
     should_alternate_between('app/src/poo.js', 'test/unit/poo.spec.js')

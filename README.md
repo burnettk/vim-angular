@@ -52,6 +52,13 @@ If there is a common convention that you feel should really work out of
 the box, feel free to file a pull request to make it work (please
 include a test to prove that it works).
 
+If you don't want to use the alternate functionality, set this before the
+plugin loads:
+
+```
+let g:angular_skip_alternate_mappings = 1
+```
+
 ### Jump to definition of service/directive/controller/etc
 
     gf

@@ -37,7 +37,9 @@ gf                      Bolsters the original gf by also sending you to the
                         That's ok; you can tell angular.vim where your source
                         and test directories are located with
                         g:angular_source_directory and
-                        g:angular_test_directory.
+                        g:angular_test_directory. You can disable this
+                        functionality by doing this before the plugin loads:
+                        let g:angular_skip_alternate_mappings = 1
 
                                                 *angular-:AS*
 :AS                     Like :A, but in a split.

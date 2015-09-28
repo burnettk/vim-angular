@@ -296,13 +296,15 @@ augroup angular_gf
   autocmd FileType javascript,html nmap <buffer> <C-W>gf     <Plug>AngularGfTabjump
 augroup END
 
-augroup angular_alternate
-  autocmd!
-  autocmd FileType javascript command! -buffer -bar -bang A :exe s:Alternate('edit<bang>')
-  autocmd FileType javascript command! -buffer -bar AS :exe s:Alternate('split')
-  autocmd FileType javascript command! -buffer -bar AV :exe s:Alternate('vsplit')
-  autocmd FileType javascript command! -buffer -bar AT :exe s:Alternate('tabedit')
-augroup END
+if !exists('g:angular_skip_alternate_mappings')
+  augroup angular_alternate
+    autocmd!
+    autocmd FileType javascript command! -buffer -bar -bang A :exe s:Alternate('edit<bang>')
+    autocmd FileType javascript command! -buffer -bar AS :exe s:Alternate('split')
+    autocmd FileType javascript command! -buffer -bar AV :exe s:Alternate('vsplit')
+    autocmd FileType javascript command! -buffer -bar AT :exe s:Alternate('tabedit')
+  augroup END
+endif
 
 augroup angular_run_spec
   autocmd!
