@@ -144,7 +144,7 @@ function! s:GenerateTestPaths(currentpath, appbasepath, testbasepath) abort
   let l:samefilename = s:SubStr(a:currentpath, a:appbasepath, a:testbasepath)
   let l:withcamelcasedspecsuffix = s:SubStr(s:SubStr(a:currentpath, a:appbasepath, a:testbasepath), ".js", "Spec.js")
   let l:withdotspecsuffix = s:SubStr(s:SubStr(a:currentpath, a:appbasepath, a:testbasepath), ".js", ".spec.js")
-  return [l:samefilename, l:withcamelcasedspecsuffix, l:withdotspecsuffix]
+  return [l:withdotspecsuffix, l:withcamelcasedspecsuffix, l:samefilename]
 endfunction
 
 function! s:GenerateSrcPaths(currentpath, appbasepath, testbasepath) abort
