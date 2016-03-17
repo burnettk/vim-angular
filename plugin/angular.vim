@@ -67,11 +67,13 @@ function! s:Find(...) abort
 
   if l:num < 1
     echo "angular.vim says: '".query."' not found"
-    return
+    return 0
   endif
 
   if l:num == 1
     exe cmd . " " . substitute(l:list, "\n", "", "g")
+
+    return 1
   else
     let tmpfile = tempname()
     exe "redir! > " . tmpfile
@@ -92,6 +94,8 @@ function! s:Find(...) abort
     botright copen
 
     call delete(tmpfile)
+
+    return 1
   endif
 endfunction
 
@@ -129,7 +133,9 @@ function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
   let l:dashcased = s:dashcase(l:wordundercursor)
   let l:filethatmayexist = l:dashcased . '.js'
 
-  if exists('g:angular_filename_convention') && (g:angular_filename_convention == 'camelcased' || g:angular_filename_convention == 'titlecased')
+  if <SID>Find(l:fileundercursor, a:cmd) == '1'
+      return
+  elseif exists('g:angular_filename_convention') && (g:angular_filename_convention == 'camelcased' || g:angular_filename_convention == 'titlecased')
     call <SID>Find(l:wordundercursor . '.js', a:cmd)
   else
     call <SID>Find(l:filethatmayexist, a:cmd)
