@@ -151,6 +151,7 @@ function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
   for query in l:queries
     try
       call <SID>Find(query, a:cmd)
+      break
     catch 'AngularQueryNotFound'
       if (query == l:filethatmayexistngdotcase)
         echo "angular.vim says: '".join(l:queries, ', ')."' not found"
