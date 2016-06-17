@@ -66,7 +66,7 @@ function! s:Find(...) abort
   let l:num=strlen(substitute(l:list, "[^\n]", "", "g"))
 
   if l:num < 1
-    echo "angular.vim says: '".query."' not found"
+    throw "AngularQueryNotFound"
     return
   endif
 
@@ -107,6 +107,16 @@ function! s:dashcase(word) abort
   return word
 endfunction
 
+function! s:dashcasewithngtype(word) abort
+  let word = substitute(a:word,'::','/','g')
+  let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
+  let word = substitute(word,'\(\l\|\d\)\(\u\)','\1_\2','g')
+  let word = substitute(word,'_\([a-zA-Z]\+\)$','.\1','g')
+  let word = substitute(word,'_','-','g')
+  let word = tolower(word)
+  return word
+endfunction
+
 function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
   let l:fileundercursor = expand('<cfile>')
 
@@ -127,13 +137,26 @@ function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
 
   let l:wordundercursor = expand('<cword>')
   let l:dashcased = s:dashcase(l:wordundercursor)
-  let l:filethatmayexist = l:dashcased . '.js'
+  let l:ngdotcased = s:dashcasewithngtype(l:wordundercursor)
+  let l:filethatmayexistverbatim = l:wordundercursor . '.js'
+  let l:filethatmayexistdashcase = l:dashcased . '.js'
+  let l:filethatmayexistngdotcase = l:ngdotcased . '.js'
 
-  if exists('g:angular_filename_convention') && (g:angular_filename_convention == 'camelcased' || g:angular_filename_convention == 'titlecased')
-    call <SID>Find(l:wordundercursor . '.js', a:cmd)
-  else
-    call <SID>Find(l:filethatmayexist, a:cmd)
-  endif
+  let l:queries = [
+    \ l:filethatmayexistverbatim,
+    \ l:filethatmayexistdashcase,
+    \ l:filethatmayexistngdotcase
+    \ ]
+
+  for query in l:queries
+    try
+      call <SID>Find(query, a:cmd)
+    catch 'AngularQueryNotFound'
+      if (query == l:filethatmayexistngdotcase)
+        echo "angular.vim says: '".join(l:queries, ', ')."' not found"
+      endif
+    endtry
+  endfor
 endfunction
 
 function! s:SubStr(originalstring, pattern, replacement) abort
