@@ -90,16 +90,9 @@ Results can be filtered by specifying exclusions in your .vimrc like this:
 let g:angular_find_ignore = ['build/', 'dist/']
 ```
 
-It does, by default, assume your filenames are dasherized (likeABoss or
-LikeABoss goes to like-a-boss.js). If you roll with likeABoss.js or
-LikeABoss.js, you can include the following in your .vimrc to make it do
-the right thing:
-
-```
-let g:angular_filename_convention = 'camelcased'
-" or
-let g:angular_filename_convention = 'titlecased'
-```
+It does work in at least some cases regardless of whether your filenames are
+dasherized (likeABoss or LikeABoss goes to like-a-boss.js), camelcased
+(likeABoss.js), or titlecased (LikeABoss.js).
 
 ### Run the current spec
 
