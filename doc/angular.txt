@@ -22,10 +22,7 @@ gf                      Bolsters the original gf by also sending you to the
                         the word under the cursor is a service/directive/etc,
                         go to the file where it is defined. For example, if
                         your cursor is on BlahService, it will take you to
-                        blah-service.js. If your filenames are not
-                        dasherized, this will not work out well. Set
-                        g:angular_filename_convention to either 'camelcased'
-                        or 'titlecased' in your .vimrc.
+                        blah-service.js.
 
                                                 *angular-:A*
 :A                      In a test file, edit the implementation, and vice

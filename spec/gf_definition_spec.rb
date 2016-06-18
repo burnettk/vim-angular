@@ -24,31 +24,22 @@ describe "gf definition" do
     current_file_name.should eq "./app/js/piles-of-poo.js"
   end
 
-  specify "should be found when the filename-is-dasherized since that is the default g:angular_filename_convention" do
+  specify "should be found when the filename-is-dasherized" do
     setup_filesystem('app/js/piles-of-poo.js')
     find_definition('pilesOfPoo')
     current_file_name.should eq "./app/js/piles-of-poo.js"
   end
 
-  specify "should be found when the filenameIsCamelcased and g:angular_filename_convention is set to camelcased" do
-    assume_vimrc('let g:angular_filename_convention = "camelcased"')
+  specify "should be found when the filenameIsCamelcased" do
     setup_filesystem('app/js/pilesOfPoo.js')
     find_definition('pilesOfPoo')
     current_file_name.should eq "./app/js/pilesOfPoo.js"
   end
 
-  specify "should be found when the FilenameIsTitlecased and g:angular_filename_convention is set to titlecased" do
-    assume_vimrc('let g:angular_filename_convention = "titlecased"')
+  specify "should be found when the FilenameIsTitlecased" do
     setup_filesystem('app/js/PilesOfPoo.js')
     find_definition('PilesOfPoo')
     current_file_name.should eq "./app/js/PilesOfPoo.js"
-  end
-
-  specify "should not be found when the FilenameIsTitlecased and g:angular_filename_convention is set to something not supported" do
-    assume_vimrc('let g:angular_filename_convention = "poopcased"')
-    setup_filesystem('app/js/PilesOfPoo.js')
-    find_definition('PilesOfPoo')
-    current_file_name.should eq 'starting-file.js'
   end
 
   specify "should be a champ about avoiding full stops" do
