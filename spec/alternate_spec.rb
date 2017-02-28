@@ -83,6 +83,17 @@ describe "alternate" do
     should_alternate_between('app/src/poo.js', 'test/spec/pooSpec.js')
   end
 
+  # https://github.com/burnettk/vim-angular/issues/22
+  specify "pairs that should work when source and test directories configured by user" do
+    assume_vimrc 'let g:angular_source_directory = "app/assets/javascripts/angular"'
+    assume_vimrc 'let g:angular_test_directory = "spec/javascripts/angular"'
+
+    should_alternate_between('app/assets/javascripts/angular/foos/index.controller.js', 'spec/javascripts/angular/foos/index.controller.spec.js')
+
+    # coffee currently not supported. pull requests welcome.
+    # should_alternate_between('app/assets/javascripts/angular/foos/index.controller.js.coffee', 'spec/javascripts/angular/foos/index.controller.spec.js.coffee')
+  end
+
   specify "pairs should not all work" do
     file_a = 'app/junk/poo.js'
     file_b = 'test/unit/poo.js'
